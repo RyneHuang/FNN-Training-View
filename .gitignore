@@ -1,0 +1,98 @@
+# ============ Python ============
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ============ Virtual Environment ============
+venv/
+env/
+ENV/
+.venv/
+*.venv
+
+# ============ Python Environment ============
+.env
+.env.*.local
+.env.local
+
+# ============ TensorFlow/Keras ============
+*.h5
+*.keras
+*.pb
+checkpoints/
+logs/
+
+# ============ Jupyter Notebook ============
+.ipynb_checkpoints
+*.ipynb
+
+# ============ PyCharm ============
+.idea/
+*.iml
+*.iws
+
+# ============ VS Code ============
+.vscode/
+*.code-workspace
+
+# ============ Node.js ============
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ============ Frontend Build ============
+frontend/dist/
+frontend/build/
+frontend/.vite/
+
+# ============ Logs ============
+*.log
+logs/
+*.log.*
+backend/logs/
+
+# ============ OS ============
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ============ Data Cache (Large Files) ============
+# Note: cache/*.npz files ARE included for offline deployment
+# Uncomment below to exclude if needed
+# backend/app/data/cache/*.npz
+
+# ============ ML Models ============
+*.pkl
+*.pickle
+*.joblib
+sklearn_/
+
+# ============ Test Coverage =<arg_value>
