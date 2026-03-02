@@ -16,7 +16,7 @@
     "recharts": "^2.10.3",
     "zustand": "^4.4.7",
     "clsx": "^2.1.0",
-    "tailwind-merge": "^2.2.0",
+    "tailwind-merge": "^3.5.0",
     "class-variance-authority": "^0.7.0",
     "lucide-react": "^0.300.0"
   },
