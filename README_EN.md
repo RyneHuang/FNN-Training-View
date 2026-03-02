@@ -1,10 +1,18 @@
-# FNN Training & Inference Visualization
+# FNN Training & Inference Visualization v2.0
 
 A web-based educational application for AI introductory courses, enabling students to intuitively understand the training and inference process of Feedforward Neural Networks (FNN).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
 [![React](https://img.shields.io/badge/React-18%2B-blue)](https://react.dev/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15-orange)](https://www.tensorflow.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green)](https://fastapi.tiangolo.com/)
+[![GitHub Stars](https://img.shields.io/github/stars/RyneHuang/FNN-Training-View?style=social)](https://github.com/RyneHuang/FNN-Training-View/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/RyneHuang/FNN-Training-View)](https://github.com/RyneHuang/FNN-Training-View/issues)
+
+[English](README_EN.md) | [简体中文](README.md) | [Deployment Guide](README_部署.md) | [Contributing](CONTRIBUTING.md)
+
+---
 
 ## 🎯 Features
 
@@ -25,6 +33,8 @@ A web-based educational application for AI introductory courses, enabling studen
 - **Overfitting Detection**: Automatic warning when validation loss increases
 - **Problem-specific Metrics**: Accuracy for classification, Loss for regression
 
+---
+
 ## 🛠 Tech Stack
 
 ### Backend
@@ -39,6 +49,8 @@ A web-based educational application for AI introductory courses, enabling studen
 - **Zustand** - Lightweight state management
 - **Recharts** - Training curve visualization
 - **Tailwind CSS** + **shadcn/ui** - Modern UI components
+
+---
 
 ## 📦 Project Structure
 
@@ -74,12 +86,19 @@ FNN-Training-View/
 │   │   └── pages/            # Main pages
 │   └── package.json
 │
-├── README.md           # (Chinese) Project description
-├── README_EN.md        # (English) This file
-├── README_部署.md       # (Chinese) Deployment guide
-├── LICENSE             # MIT License
+├── .github/                    # GitHub configuration
+│   ├── ISSUE_TEMPLATE/        # Issue templates
+│   └── PULL_REQUEST_TEMPLATE.md
+├── README.md                   # (Chinese) Project description
+├── README_EN.md                # (English) This file
+├── README_部署.md              # (Chinese) Deployment guide
+├── CONTRIBUTING.md             # Contribution guidelines
+├── CHANGELOG.md                # Version history
+├── LICENSE                     # MIT License
 └── start.sh / start.bat # Startup scripts
 ```
+
+---
 
 ## 🚀 Quick Start
 
@@ -118,6 +137,8 @@ Frontend runs at http://localhost:5173
 start.bat
 ```
 
+---
+
 ## 📚 Datasets
 
 ### Classification Datasets
@@ -146,6 +167,8 @@ start.bat
 | california_housing | 8 | 20640 | Hard | California house price prediction |
 | diabetes | 10 | 442 | Medium | Diabetes progression prediction |
 
+---
+
 ## 🔧 Network Configuration
 
 ### Supported Options
@@ -164,6 +187,8 @@ Each dataset has an optimal pre-configured network. Students can modify based on
 - **Underfitting**: Increase layers/neurons, adjust learning rate
 - **Overfitting**: Reduce network size, add regularization
 - **Slow convergence**: Increase learning rate, change optimizer
+
+---
 
 ## 📡 API Endpoints
 
@@ -184,6 +209,8 @@ Each dataset has an optimal pre-configured network. Students can modify based on
 
 Visit http://localhost:8000/docs for interactive API documentation.
 
+---
+
 ## 🎓 Usage Workflow
 
 1. **Select Dataset** - Choose from 16 built-in datasets
@@ -192,6 +219,8 @@ Visit http://localhost:8000/docs for interactive API documentation.
 4. **Start Training** - Begin training with real-time visualization
 5. **Monitor Progress** - Watch Loss/Accuracy curves, receive advice
 6. **Inference** - Test trained model with layer-wise visualization
+
+---
 
 ## 🚢 Production Deployment
 
@@ -237,6 +266,8 @@ server {
 
 For detailed deployment instructions, see [README_部署.md](README_部署.md).
 
+---
+
 ## 🎓 Educational Use Cases
 
 ### Classroom Scenarios
@@ -251,13 +282,27 @@ For detailed deployment instructions, see [README_部署.md](README_部署.md).
 - Comparing different activation functions and optimizers
 - Relationship between model complexity and generalization
 
+---
+
+## 📈 Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FRyneHuang%2FFNN-Training-View.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FRyneHuang%2FFNN-Training-View?ref=badge_large)
+
+---
 
 ## 🙏 Acknowledgments
 
@@ -265,9 +310,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - scikit-learn for the excellent dataset collection
 - React and Vite communities for modern frontend tools
 
+---
+
 ## 📧 Contact
 
-For questions, suggestions, or bug reports, please open an issue on GitHub.
+- **GitHub Issues**: [Report a bug](https://github.com/RyneHuang/FNN-Training-View/issues)
+- **GitHub Discussions**: [Join discussions](https://github.com/RyneHuang/FNN-Training-View/discussions)
+
+---
+
+## ⭐ Star History
+
+If you find this project helpful, please give us a star!
+
+[![Star History Chart](https://api.star-history.com/svg?repos=RyneHuang/FNN-Training-View&type=Date)](https://star-history.com/#RyneHuang/FNN-Training-View&Date)
 
 ---
 

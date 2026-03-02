@@ -1,0 +1,38 @@
+version: 2
+updates:
+  # Enable version updates for Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "RyneHuang"
+    labels:
+      - "dependencies"
+      - "python"
+
+  # Enable version updates for npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "RyneHuang"
+    labels:
+      - "dependencies"
+      - "javascript"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    open-pull-requests-limit: 2
+    labels:
+      - "dependencies"
+      - "github-actions"

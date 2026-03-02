@@ -5,6 +5,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
 [![React](https://img.shields.io/badge/React-18%2B-blue)](https://react.dev/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15-orange)](https://www.tensorflow.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green)](https://fastapi.tiangolo.com/)
+[![GitHub Stars](https://img.shields.io/github/stars/RyneHuang/FNN-Training-View?style=social)](https://github.com/RyneHuang/FNN-Training-View/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/RyneHuang/FNN-Training-View)](https://github.com/RyneHuang/FNN-Training-View/issues)
+
+[English](README_EN.md) | [简体中文](README.md) | [部署指南](README_部署.md) | [贡献指南](CONTRIBUTING.md)
+
+---
 
 ## 🆕 v2.0 新特性
 
@@ -22,7 +30,17 @@
 
 ---
 
-## 功能特性
+## 📸 功能预览
+
+| 训练可视化 | 网络结构 | 推理分析 | 数据集浏览 |
+|------------|----------|----------|------------|
+| 实时 Loss/Accuracy 曲线 | 垂直层级布局 | 逐层激活值展示 | Excel 风格表格 |
+| 过拟合检测 | 可配置隐藏层 | 权重可视化 | 详细数据说明 |
+| 训练建议 | 推荐配置 | 分类/回归支持 | 16 种数据集 |
+
+---
+
+## 🎯 功能特性
 
 ### 核心功能
 - **16 种内置数据集**：包括逻辑门、鸢尾花、手写数字、月亮/圆形等经典数据集，以及乳腺癌、葡萄酒、房价预测等真实世界数据集
@@ -39,27 +57,27 @@
 
 ---
 
-## 技术栈
+## 🛠 技术栈
 
 ### 后端
-- Python 3.9+
-- FastAPI - 高性能异步 Web 框架
-- TensorFlow/Keras 2.15 - 深度学习框架
-- scikit-learn 1.3.2 - 数据集生成与预处理
+- **Python** 3.9+
+- **FastAPI** 0.104 - 高性能异步 Web 框架
+- **TensorFlow/Keras** 2.15 - 深度学习框架
+- **scikit-learn** 1.3.2 - 数据集生成与预处理
 
 ### 前端
-- React 18 + TypeScript
-- Vite - 极速构建工具
-- Zustand - 轻量级状态管理
-- Recharts - 训练曲线可视化
-- Tailwind CSS + shadcn/ui - 现代 UI 组件库
+- **React** 18 + **TypeScript**
+- **Vite** - 极速构建工具
+- **Zustand** - 轻量级状态管理
+- **Recharts** - 训练曲线可视化
+- **Tailwind CSS** + **shadcn/ui** - 现代 UI 组件库
 
 ---
 
-## 项目结构
+## 📦 项目结构
 
 ```
-FNN_Training_View/
+FNN-Training-View/
 ├── backend/                    # Python 后端
 │   ├── app/
 │   │   ├── main.py            # FastAPI 入口
@@ -92,17 +110,21 @@ FNN_Training_View/
 │   │   └── pages/            # 页面组件
 │   └── package.json
 │
-├── README.md           # 项目说明（本文件）
-├── README_EN.md        # 英文版 README
-├── README_部署.md       # 详细部署指南（中文）
-├── CONTRIBUTING.md     # 贡献指南
-├── LICENSE             # MIT 开源许可证
-└── start.sh / start.bat # 启动脚本
+├── .github/                    # GitHub 配置
+│   ├── ISSUE_TEMPLATE/        # Issue 模板
+│   └── PULL_REQUEST_TEMPLATE.md
+├── README.md                   # 项目说明（本文件）
+├── README_EN.md                # 英文版 README
+├── README_部署.md              # 详细部署指南（中文）
+├── CONTRIBUTING.md             # 贡献指南
+├── CHANGELOG.md                # 更新日志
+├── LICENSE                     # MIT 开源许可证
+└── start.sh / start.bat        # 启动脚本
 ```
 
 ---
 
-## 快速开始
+## 🚀 快速开始
 
 ### 环境要求
 - Python 3.9+
@@ -154,7 +176,7 @@ start.bat
 
 ---
 
-## 支持的数据集
+## 📚 支持的数据集
 
 ### 分类数据集（9 种）
 
@@ -184,7 +206,7 @@ start.bat
 
 ---
 
-## 网络配置选项
+## ⚙️ 网络配置选项
 
 ### 支持的配置
 - **隐藏层数量**：0-5 层
@@ -205,7 +227,7 @@ start.bat
 
 ---
 
-## API 端点
+## 📡 API 端点
 
 ### 数据集 API
 - `GET /api/datasets` - 获取所有可用数据集列表
@@ -226,7 +248,7 @@ start.bat
 
 ---
 
-## 使用流程
+## 🎓 使用流程
 
 1. **选择数据集**：从 16 种内置数据集中选择一个
 2. **配置网络**：设置隐藏层数量、神经元数量、激活函数和训练参数
@@ -237,7 +259,7 @@ start.bat
 
 ---
 
-## 服务器部署
+## 🚢 服务器部署
 
 ### 生产环境部署
 
@@ -270,7 +292,7 @@ server {
 
     # 前端静态文件
     location / {
-        root /path/to/FNN_Training_View/frontend/dist;
+        root /path/to/FNN-Training-View/frontend/dist;
         try_files $uri $uri/ /index.html;
     }
 
@@ -295,7 +317,7 @@ server {
 
 ---
 
-## 教学应用场景
+## 🎨 教学应用场景
 
 ### 课堂演示
 - 直观展示神经网络训练过程
@@ -314,7 +336,7 @@ server {
 
 ---
 
-## 多用户使用说明
+## 👥 多用户使用说明
 
 ### Session 隔离机制
 
@@ -337,13 +359,27 @@ server {
 
 ---
 
-## 许可证
+## 📈 更新日志
 
-本项目采用 MIT 开源许可证。详见 [LICENSE](LICENSE) 文件。
+查看 [CHANGELOG.md](CHANGELOG.md) 了解详细的版本更新历史。
 
 ---
 
-## 致谢
+## 🤝 贡献
+
+欢迎贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解详情。
+
+---
+
+## 📄 许可证
+
+本项目采用 MIT 开源许可证。详见 [LICENSE](LICENSE) 文件。
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FRyneHuang%2FFNN-Training-View.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FRyneHuang%2FFNN-Training-View?ref=badge_large)
+
+---
+
+## 🙏 致谢
 
 - TensorFlow 和 Keras 团队提供的深度学习框架
 - scikit-learn 提供的优秀数据集集合
@@ -351,9 +387,18 @@ server {
 
 ---
 
-## 联系方式
+## 📧 联系方式
 
-如有问题或建议，请在 GitHub 上提交 issue。
+- **GitHub Issues**: [提交问题](https://github.com/RyneHuang/FNN-Training-View/issues)
+- **GitHub Discussions**: [参与讨论](https://github.com/RyneHuang/FNN-Training-View/discussions)
+
+---
+
+## ⭐ Star History
+
+如果这个项目对您有帮助，请给我们一个 Star！
+
+[![Star History Chart](https://api.star-history.com/svg?repos=RyneHuang/FNN-Training-View&type=Date)](https://star-history.com/#RyneHuang/FNN-Training-View&Date)
 
 ---
 

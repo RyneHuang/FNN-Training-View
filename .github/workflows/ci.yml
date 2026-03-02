@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        cd backend
+        pip install -r requirements.txt
+
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 backend/app --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings
+        flake8 backend/app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Test API
+      run: |
+        cd backend
+        python test_api.py
+
+    - name: Test Datasets
+      run: |
+        cd backend
+        python test_all_datasets.py
+
+  frontend-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install dependencies
+      run: |
+        cd frontend
+        npm ci
+
+    - name: Lint with ESLint
+      run: |
+        cd frontend
+        npm run lint --if-present
+      continue-on-error: true
+
+    - name: Type check
+      run: |
+        cd frontend
+        npx tsc --noEmit
+      continue-on-error: true
+
+    - name: Build
+      run: |
+        cd frontend
+        npm run build
+
+  license-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check License Headers
+      run: |
+        # Check if LICENSE file exists
+        if [ ! -f "LICENSE" ]; then
+          echo "License file not found!"
+          exit 1
+        fi
+        echo "License file found"
+
+    - name: Check Python Files
+      run: |
+        # Verify Python files have no hardcoded secrets
+        if grep -r "api_key\|secret\|password\|token" backend/app --include="*.py" | grep -v "# " | grep -v "session_id"; then
+          echo "Warning: Possible hardcoded secrets found"
+        fi
