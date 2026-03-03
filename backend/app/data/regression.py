@@ -1,13 +1,20 @@
 """Regression dataset generators."""
 import numpy as np
 import os
+import logging
 from sklearn.datasets import fetch_california_housing, load_diabetes
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from typing import Dict, Tuple
 
+# 配置日志
+logger = logging.getLogger(__name__)
+
 # 数据缓存目录
 CACHE_DIR = os.path.join(os.path.dirname(__file__), 'cache')
+
+# 离线模式：设置为 True 时，只从缓存加载，不联网下载
+OFFLINE_MODE = os.getenv('FNN_OFFLINE_MODE', 'true').lower() == 'true'
 
 
 def _load_from_cache(dataset_name: str):
@@ -15,6 +22,10 @@ def _load_from_cache(dataset_name: str):
     cache_file = os.path.join(CACHE_DIR, f"{dataset_name}.npz")
 
     if not os.path.exists(cache_file):
+        logger.warning(f"Cache file not found: {cache_file}")
+        if OFFLINE_MODE:
+            logger.error(f"OFFLINE_MODE: Cannot load dataset '{dataset_name}' - cache file missing")
+            logger.error(f"Please ensure the cache directory exists and contains all dataset files")
         return None
 
     try:
@@ -30,6 +41,7 @@ def _load_from_cache(dataset_name: str):
             'feature_names': data['metadata_featureNames'].tolist()
         }
 
+        logger.info(f"Successfully loaded dataset '{dataset_name}' from cache")
         return {
             'train_inputs': data['train_inputs'],
             'train_labels': data['train_labels'],
@@ -38,7 +50,7 @@ def _load_from_cache(dataset_name: str):
             'metadata': metadata
         }
     except Exception as e:
-        print(f"Warning: Failed to load {dataset_name} from cache: {e}")
+        logger.error(f"Failed to load {dataset_name} from cache: {e}")
         return None
 
 
@@ -266,6 +278,7 @@ def load_regression_dataset(name: str, train_ratio: float = 0.8) -> Dict:
     Load a specific regression dataset and split into train/test.
 
     优先从缓存文件加载，如果缓存不存在则动态生成。
+    离线模式下，如果缓存不存在将抛出错误。
 
     Args:
         name: dataset name
@@ -273,13 +286,26 @@ def load_regression_dataset(name: str, train_ratio: float = 0.8) -> Dict:
 
     Returns:
         Dictionary with train/test inputs and labels
+
+    Raises:
+        ValueError: If dataset is unknown or cache is missing in offline mode
     """
     # 优先尝试从缓存加载（用于离线部署）
     cached_data = _load_from_cache(name)
     if cached_data is not None:
         return cached_data
 
-    # 缓存不存在，动态生成
+    # 离线模式下，缓存不存在时抛出错误
+    if OFFLINE_MODE:
+        raise ValueError(
+            f"Dataset '{name}' is not available in offline mode.\n"
+            f"Cache file not found: {os.path.join(CACHE_DIR, f'{name}.npz')}\n"
+            f"Please ensure all cache files exist in the cache directory.\n"
+            f"Available datasets in cache: {_list_cached_datasets()}"
+        )
+
+    # 缓存不存在，动态生成（在线模式）
+    logger.warning(f"Cache miss for '{name}', generating dataset dynamically")
     datasets = get_all_regression_datasets()
 
     if name not in datasets:
@@ -310,3 +336,11 @@ def load_regression_dataset(name: str, train_ratio: float = 0.8) -> Dict:
             'feature_names': dataset_info['feature_names']
         }
     }
+
+
+def _list_cached_datasets() -> list:
+    """列出缓存目录中可用的数据集"""
+    if not os.path.exists(CACHE_DIR):
+        return []
+    cached_files = [f.replace('.npz', '') for f in os.listdir(CACHE_DIR) if f.endswith('.npz')]
+    return sorted(cached_files)

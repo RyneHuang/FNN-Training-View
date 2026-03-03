@@ -1,10 +1,26 @@
 """FastAPI main application."""
+import logging
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.datasets import router as datasets_router
 from app.api.training import router as training_router
 from app.api.inference import router as inference_router
 from app.middleware.session import SessionMiddleware
+
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# 离线模式检查
+OFFLINE_MODE = os.getenv('FNN_OFFLINE_MODE', 'true').lower() == 'true'
+if OFFLINE_MODE:
+    logger.info("Running in OFFLINE MODE - datasets will only load from cache")
+else:
+    logger.info("Running in ONLINE MODE - datasets will be downloaded if cache is missing")
 
 # Create FastAPI app
 app = FastAPI(
