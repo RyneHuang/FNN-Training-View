@@ -5,6 +5,9 @@ from tensorflow import keras
 from typing import List, Dict, Any, Optional
 import json
 import uuid
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ModelManager:
@@ -14,6 +17,63 @@ class ModelManager:
         # 嵌套字典结构：{session_id: {model_id: model}}
         self.models: Dict[str, Dict[str, keras.Model]] = {}
         self.model_configs: Dict[str, Dict[str, Dict]] = {}
+
+        # 配置 GPU 显存增长模式（按需分配，而不是占用所有显存）
+        self._configure_gpu_memory()
+
+    def _configure_gpu_memory(self):
+        """配置 GPU 显存增长模式，支持多用户并发训练"""
+        try:
+            gpus = tf.config.list_physical_devices('GPU')
+            if gpus:
+                for gpu in gpus:
+                    try:
+                        tf.config.set_memory_growth(gpu, True)
+                        logger.info(f"GPU {gpu.name}: 显存增长模式已启用")
+                    except RuntimeError as e:
+                        logger.warning(f"GPU {gpu.name}: 配置显存增长失败: {e}")
+
+                # 设置虚拟 GPU 内存限制（可选，用于多用户隔离）
+                # 每个用户最多使用 2GB 显存
+                # self._set_virtual_gpus(gpus, memory_limit=2048)
+
+                logger.info(f"检测到 {len(gpus)} 个 GPU，已配置显存管理")
+            else:
+                logger.info("未检测到 GPU，使用 CPU 训练")
+        except Exception as e:
+            logger.warning(f"GPU 配置失败: {e}")
+
+    def _set_virtual_gpus(self, gpus, memory_limit: int = 2048):
+        """
+        设置虚拟 GPU，用于多用户显存隔离
+
+        Args:
+            gpus: 物理GPU列表
+            memory_limit: 每个虚拟GPU的显存限制（MB）
+        """
+        if not gpus:
+            return
+
+        try:
+            # 在第一个GPU上创建虚拟GPU
+            tf.config.set_logical_device_configuration(
+                gpus[0],
+                [tf.config.LogicalDeviceConfiguration(
+                    memory_limit=memory_limit,
+                    # 可以为每个用户创建独立的虚拟GPU
+                )]
+            )
+            logger.info(f"已配置虚拟 GPU，每个实例显存限制: {memory_limit}MB")
+        except RuntimeError as e:
+            logger.warning(f"虚拟 GPU 配置失败: {e}")
+
+    def cleanup_gpu_memory(self):
+        """清理 GPU 显存"""
+        try:
+            keras.backend.clear_session()
+            logger.info("已清理 Keras 会话和 GPU 显存")
+        except Exception as e:
+            logger.warning(f"清理 GPU 显存失败: {e}")
 
     def _ensure_session(self, session_id: str):
         """确保 session 存在"""
@@ -210,11 +270,21 @@ class ModelManager:
         return self.model_configs[session_id].get(model_id)
 
     def remove_model(self, session_id: str, model_id: str):
-        """移除模型（带 session 隔离）"""
+        """移除模型（带 session 隔离）并清理 GPU 显存"""
         if session_id in self.models and model_id in self.models[session_id]:
+            # 显式删除 Keras 模型以释放 GPU 显存
+            model = self.models[session_id][model_id]
+            try:
+                del model
+            except:
+                pass
             del self.models[session_id][model_id]
+
         if session_id in self.model_configs and model_id in self.model_configs[session_id]:
             del self.model_configs[session_id][model_id]
+
+        # 清理 Keras 会话以释放 GPU 显存
+        self.cleanup_gpu_memory()
 
     def get_session_models(self, session_id: str) -> List[str]:
         """获取 session 中的所有模型 ID"""
@@ -223,11 +293,20 @@ class ModelManager:
         return list(self.models[session_id].keys())
 
     def clear_session(self, session_id: str):
-        """清除 session 中的所有模型"""
+        """清除 session 中的所有模型并清理 GPU 显存"""
         if session_id in self.models:
+            # 显式删除所有 Keras 模型
+            for model_id, model in self.models[session_id].items():
+                try:
+                    del model
+                except:
+                    pass
             self.models[session_id].clear()
         if session_id in self.model_configs:
             self.model_configs[session_id].clear()
+
+        # 清理 Keras 会话以释放 GPU 显存
+        self.cleanup_gpu_memory()
 
 
 # 全局模型管理器实例

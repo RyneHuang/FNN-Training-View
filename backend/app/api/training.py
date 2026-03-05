@@ -107,6 +107,16 @@ def train_in_background(
 
         training_status[session_id][model_id] = 'completed'
 
+        # 训练完成后清理 GPU 显存（保留模型以便推理）
+        # 注意：模型仍保留在 model_manager 中，可以继续用于推理
+        # 但清理会话可以释放训练过程中的临时张量
+        try:
+            import tensorflow as tf
+            from tensorflow import keras
+            keras.backend.clear_session()
+        except:
+            pass
+
     except Exception as e:
         import traceback
         error_msg = str(e)
