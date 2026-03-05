@@ -28,7 +28,7 @@ class ModelManager:
             if gpus:
                 for gpu in gpus:
                     try:
-                        tf.config.set_memory_growth(gpu, True)
+                        tf.config.experimental.set_memory_growth(gpu, True)
                         logger.info(f"GPU {gpu.name}: 显存增长模式已启用")
                     except RuntimeError as e:
                         logger.warning(f"GPU {gpu.name}: 配置显存增长失败: {e}")

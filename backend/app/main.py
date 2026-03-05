@@ -1,6 +1,13 @@
 """FastAPI main application."""
 import logging
 import os
+
+# 配置日志（必须在导入其他模块之前）
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.datasets import router as datasets_router
@@ -8,11 +15,6 @@ from app.api.training import router as training_router
 from app.api.inference import router as inference_router
 from app.middleware.session import SessionMiddleware
 
-# 配置日志
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 # 离线模式检查
