@@ -31,11 +31,23 @@ def _load_from_cache(dataset_name: str):
     try:
         data = np.load(cache_file, allow_pickle=True)
 
+        # 辅助函数：安全地从 numpy 数组中提取字符串
+        def extract_str(value):
+            if isinstance(value, bytes):
+                return value.decode('utf-8')
+            elif isinstance(value, np.ndarray):
+                if value.dtype.kind in ['U', 'S', 'O']:  # Unicode, bytes, object
+                    item = value.item()
+                    if isinstance(item, bytes):
+                        return item.decode('utf-8')
+                    return str(item)
+            return str(value)
+
         # 提取元数据
         metadata = {
-            'name': str(data['metadata_name'], encoding='utf-8'),
-            'type': str(data['metadata_type'], encoding='utf-8'),
-            'description': str(data['metadata_description'], encoding='utf-8'),
+            'name': extract_str(data['metadata_name']),
+            'type': extract_str(data['metadata_type']),
+            'description': extract_str(data['metadata_description']),
             'features': int(data['metadata_features']),
             'samples': int(data['metadata_samples']),
             'feature_names': data['metadata_featureNames'].tolist()
@@ -51,6 +63,8 @@ def _load_from_cache(dataset_name: str):
         }
     except Exception as e:
         logger.error(f"Failed to load {dataset_name} from cache: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
         return None
 
 
