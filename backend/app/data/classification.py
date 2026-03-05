@@ -54,12 +54,19 @@ def _load_from_cache(dataset_name: str):
             'classes': int(data['metadata_classes']) if 'metadata_classes' in data else None
         }
 
+        # 转换数据为 list（与动态生成保持一致的格式）
+        train_inputs = data['train_inputs'].tolist()
+        train_labels = data['train_labels'].tolist()
+        test_inputs = data['test_inputs'].tolist()
+        test_labels = data['test_labels'].tolist()
+
         logger.info(f"Successfully loaded dataset '{dataset_name}' from cache")
         return {
-            'train_inputs': data['train_inputs'],
-            'train_labels': data['train_labels'],
-            'test_inputs': data['test_inputs'],
-            'test_labels': data['test_labels'],
+            'name': metadata['name'],  # 添加顶层 name 字段
+            'train_inputs': train_inputs,
+            'train_labels': train_labels,
+            'test_inputs': test_inputs,
+            'test_labels': test_labels,
             'metadata': metadata
         }
     except Exception as e:
